@@ -756,6 +756,7 @@ static void mark_pns(AACEncContext *s, AVCodecContext *avctx, SingleChannelEleme
 static void search_for_ms(AACEncContext *s, ChannelElement *cpe)
 {
     int start = 0, i, w, w2, g, sid_sf_boost, prev_mid, prev_side;
+    int valueB0 = 0, valueB1 = 0; //add by lubin
     uint8_t nextband0[128], nextband1[128];
     float *M   = s->scoefs + 128*0, *S   = s->scoefs + 128*1;
     float *L34 = s->scoefs + 128*2, *R34 = s->scoefs + 128*3;
@@ -800,7 +801,7 @@ static void search_for_ms(AACEncContext *s, ChannelElement *cpe)
 
                 for (sid_sf_boost = 0; sid_sf_boost < 4; sid_sf_boost++) {
                     float dist1 = 0.0f, dist2 = 0.0f;
-                    int B0 = 0, B1 = 0;
+                    //int B0 = 0, B1 = 0; //remove by lubin
                     int minidx;
                     int mididx, sididx;
                     int midcb, sidcb;
@@ -862,12 +863,12 @@ static void search_for_ms(AACEncContext *s, ChannelElement *cpe)
                                                     sididx,
                                                     sidcb,
                                                     mslambda / (minthr * bmax), INFINITY, &b4, NULL, 0);
-                        B0 += b1+b2;
-                        B1 += b3+b4;
+                        valueB0 += (b1+b2);
+                        valueB1 += (b3+b4);
                         dist1 -= b1+b2;
                         dist2 -= b3+b4;
                     }
-                    cpe->ms_mask[w*16+g] = dist2 <= dist1 && B1 < B0;
+                    cpe->ms_mask[w*16+g] = dist2 <= dist1 && valueB1 < valueB0;
                     if (cpe->ms_mask[w*16+g]) {
                         if (sce0->band_type[w*16+g] != NOISE_BT && sce1->band_type[w*16+g] != NOISE_BT) {
                             sce0->sf_idx[w*16+g] = mididx;
@@ -879,7 +880,7 @@ static void search_for_ms(AACEncContext *s, ChannelElement *cpe)
                             cpe->ms_mask[w*16+g] = 0;
                         }
                         break;
-                    } else if (B1 > B0) {
+                    } else if (valueB1 > valueB0) {
                         /* More boost won't fix this */
                         break;
                     }
