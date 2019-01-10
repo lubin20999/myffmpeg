@@ -24,6 +24,12 @@ function build_one
 --disable-ffplay \
 --disable-ffprobe \
 --disable-doc \
+--disable-avdevice --disable-devices --disable-filters --disable-demuxer=srt --disable-demuxer=microdvd --disable-demuxer=jacosub \
+--disable-demuxer=sami --disable-demuxer=realtext --disable-demuxer=dts --disable-demuxer=subviewer --disable-demuxer=subviewer1 \
+--disable-demuxer=pjs --disable-demuxer=vplayer --disable-demuxer=mpl2 --disable-decoder=ass --disable-decoder=srt \
+--disable-decoder=subrip     --disable-decoder=microdvd --disable-decoder=jacosub --disable-decoder=sami \
+--disable-decoder=realtext --disable-decoder=movtext --disable-decoder=subviewer \
+--disable-decoder=subviewer1 --disable-decoder=pjs --disable-decoder=vplayer --disable-decoder=mpl2 \
 --disable-symver \
 --disable-network \
 --disable-decoder=hevc \
